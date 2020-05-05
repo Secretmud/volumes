@@ -32,11 +32,11 @@ print_menu() {
 setup_containers() {
         for i in 1 2 3
         do
-                sudo docker run --name web$i --hostname web$i  -v ~/volumes/web/:/var/www/html -d richarvey/nginx-php-fpm
+                sudo docker run --name web$i --hostname web$i  -v ~/volumes/webapp/:/var/www/html -d richarvey/nginx-php-fpm
 
         done
 
-	sudo docker run -d --name lb -v ~/volumes/lb:/usr/local/etc/haproxy:ro haproxy:latest
+	sudo docker run -d --name lb --add-host web1:172.17.0.2 --add-host web2:172.17.0.3 --add-host web3:172.17.0.4 -v ~/volumes/lb:/usr/local/etc/haproxy:ro haproxy:latest
 
 }
 
