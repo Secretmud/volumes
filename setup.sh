@@ -55,8 +55,8 @@ setup_containers() {
 	  -e MYSQL_ROOT_PASSWORD="rootpass" \
 	  -e MYSQL_USER=maxscaleuser \
 	  -e MYSQL_PASSWORD=maxscalepass \
-	  -v ~/volumes/1node/datadir:/var/lib/mysql \
-	  -v ~/volumes/1node/conf.d:/etc/mysql/mariadb.conf.d \
+	  -v ~/volumes/db1/datadir:/var/lib/mysql \
+	  -v ~/volumes/db1/conf.d:/etc/mysql/mariadb.conf.d \
 	  mariadb:10.4 \
 	   --wsrep-new-cluster
 
@@ -65,8 +65,8 @@ setup_containers() {
 	  -e MYSQL_ROOT_PASSWORD="rootpass" \
 	  -e MYSQL_USER=maxscaleuser \
 	  -e MYSQL_PASSWORD=maxscalepass \
-	  -v ~/volumes/2node/datadir:/var/lib/mysql \
-	  -v ~/volumes/2node/conf.d:/etc/mysql/mariadb.conf.d \
+	  -v ~/volumes/db2/datadir:/var/lib/mysql \
+	  -v ~/volumes/db2/conf.d:/etc/mysql/mariadb.conf.d \
 	  mariadb:10.4
 
 	sleep 40
@@ -74,8 +74,8 @@ setup_containers() {
 	  -e MYSQL_ROOT_PASSWORD="rootpass" \
 	  -e MYSQL_USER=maxscaleuser \
 	  -e MYSQL_PASSWORD=maxscalepass \
-	  -v ~/volumes/3node/datadir:/var/lib/mysql \
-	  -v ~/volumes/3node/conf.d:/etc/mysql/mariadb.conf.d \
+	  -v ~/volumes/db3/datadir:/var/lib/mysql \
+	  -v ~/volumes/db3/conf.d:/etc/mysql/mariadb.conf.d \
 	  mariadb:10.4
 	sleep 10
 	sudo docker run -d --name dbproxy --hostname maxscale -v ~/volumes/dbproxy/my-maxscale.cnf:/etc/maxscale.cnf.d/my-maxscale.cnf mariadb/maxscale:latest
