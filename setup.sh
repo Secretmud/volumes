@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/bin/bash
 
 install_docker() {
         sudo apt install -y docker.io
@@ -44,6 +44,7 @@ setup_containers() {
         for i in 1 2 3
         do
                 sudo docker run --name web$i --hostname web$i  -v ~/volumes/webapp/:/var/www/html -d richarvey/nginx-php-fpm
+		sleep 1
 
         done
 
@@ -59,6 +60,9 @@ setup_containers() {
 	   --wsrep-new-cluster
 
 	sleep 40
+	sudo docker exec -i db1 bash -c 'exec mysql -u root -p"rootpass" < ~/volumes/sql/maxscaleuser.sql'
+	sudo docker exec -i db1 bash -c 'exec mysql -u root -p"rootpass" < ~/volumes/sql/studentinfo.sql'
+	sleep 10
 	sudo docker run -d --name db2 --hostname dbgc2 \
 	  -e MYSQL_ROOT_PASSWORD="rootpass" \
 	  -e MYSQL_USER=maxscaleuser \
