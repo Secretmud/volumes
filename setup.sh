@@ -51,7 +51,7 @@ setup_containers() {
         done
 
 	sudo docker run -d --name lb --add-host web1:172.17.0.2 --add-host web2:172.17.0.3 --add-host web3:172.17.0.4 -v ~/volumes/lb:/usr/local/etc/haproxy:ro haproxy:latest
-	echo "Seting up database connections this might take some time"
+	echo "Setting up database connections this might take some time"
 	sleep 10
 	sudo docker run -d --name db1 --hostname dbgc1 \
 	  -e MYSQL_ROOT_PASSWORD="rootpass" \
