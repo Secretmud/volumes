@@ -60,8 +60,8 @@ setup_containers() {
 	   --wsrep-new-cluster
 
 	sleep 40
-	sudo docker exec -i db1 bash -c 'exec mysql -u root -p"rootpass" < ~/volumes/sql/maxscaleuser.sql'
-	sudo docker exec -i db1 bash -c 'exec mysql -u root -p"rootpass" < ~/volumes/sql/studentinfo.sql'
+	sudo docker exec -i db1 bash -c 'exec mysql -u root -p"rootpass" < $(pwd)/volumes/sql/maxscaleuser.sql'
+	sudo docker exec -i db1 bash -c 'exec mysql -u root -p"rootpass" < $(pwd)/volumes/sql/studentinfo.sql'
 	sleep 10
 	sudo docker run -d --name db2 --hostname dbgc2 \
 	  -e MYSQL_ROOT_PASSWORD="rootpass" \
