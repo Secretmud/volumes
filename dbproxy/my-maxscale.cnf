@@ -1,0 +1,50 @@
+[db1]
+type=server
+address=172.17.0.6
+port=3306
+protocol=MariaDBBackend
+serv_weight = 2
+
+[db2]
+type=server
+address=172.17.0.7
+port=3306
+protocol=MariaDBBackend
+serv_weight = 1
+
+[db3]
+type=server
+address=172.17.0.8
+port=3306
+protocol=MariaDBBackend
+serv_weight = 1
+
+[MariaDB-Monitor]
+type=monitor
+module=galeramon
+servers=db1,db2,db3
+user=maxscaleuser
+password=maxscalepass
+monitor_interval=2000
+disable_master_failback = 1
+
+[Read-Write-Service]
+type=service
+router=readwritesplit
+servers=db1,db2,db3
+user=maxscaleuser
+password=maxscalepass
+slave_selection_criteria= LEAST_GLOBAL_CONNECTIONS
+master_failure_mode = error_on_write
+max_slave_connections = 1
+weightby = serv_weight
+enable_root_user = true
+
+
+[Read-Write-Listener]
+type=listener
+service=Read-Write-Service
+protocol=MariaDBClient
+port=3306
+address = 0.0.0.0
+
