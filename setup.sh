@@ -2,10 +2,10 @@
 
 install_docker() {
         sudo apt install -y docker.io
-        sudo docker pull richarvey/nginx-php-fpm
-        sudo docker pull haproxy
-        sudo docker pull mariadb
-        sudo docker pull mariadb/maxscale
+        sudo docker pull richarvey/nginx-php-fpm:latest
+        sudo docker pull haproxy:latest
+        sudo docker pull mariadb:10.4
+        sudo docker pull mariadb/maxscale:latest
 }
 
 hosts_setup() {
@@ -42,8 +42,7 @@ clean_volumes() {
 }
 
 setup_containers() {
-	
-	
+	direc=$(pwd)
         for i in 1 2 3
         do
                 sudo docker run --name web$i --hostname web$i  -v ~/volumes/webapp/:/var/www/html -d richarvey/nginx-php-fpm
@@ -52,6 +51,7 @@ setup_containers() {
         done
 
 	sudo docker run -d --name lb --add-host web1:172.17.0.2 --add-host web2:172.17.0.3 --add-host web3:172.17.0.4 -v ~/volumes/lb:/usr/local/etc/haproxy:ro haproxy:latest
+	echo "Seting up database connections this might take some time"
 	sleep 10
 	sudo docker run -d --name db1 --hostname dbgc1 \
 	  -e MYSQL_ROOT_PASSWORD="rootpass" \
@@ -63,8 +63,11 @@ setup_containers() {
 	   --wsrep-new-cluster
 
 	sleep 40
-	sudo docker exec -i db1 bash -c 'exec mysql -u root -p"rootpass" < volumes/sql/maxscaleuser.sql'
-	sudo docker exec -i db1 bash -c 'exec mysql -u root -p"rootpass" < volumes/sql/studentinfo.sql'
+	sudo docker cp $direc/volumes/sql/maxscaleuser.sql db1:/
+	sudo docker cp $direc/volumes/sql/studentinfo.sql db1:/
+	sleep 1
+	sudo docker exec -i db1 bash -c 'exec mysql -u root -p"rootpass" < /maxscaleuser.sql'
+	sudo docker exec -i db1 bash -c 'exec mysql -u root -p"rootpass" < /studentinfo.sql'
 	sleep 10
 	sudo docker run -d --name db2 --hostname dbgc2 \
 	  -e MYSQL_ROOT_PASSWORD="rootpass" \
