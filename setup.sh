@@ -27,17 +27,15 @@ hosts_setup() {
 }
 
 print_menu() {
-        echo "1:Run all\n2:Install docker\n3:Setup hosts\n4:Setup Docker containers"
+	echo "1:Run all\n2:Install docker\n3:Setup hosts\n4:Setup Docker containers\n5:Clean all volumes - not included in Run all(1)."
 }
 
 clean_volumes() {
-	cd ~/volumes
-	for i in 1 2 3
-	do
-		sudo rm -rf $inode/datadir
-		sudo cp -R datadir $inode/	
-	done
-	
+	sudo docker kill web1 web2 web3 lb db1 db2 db3 dbproxy
+	sudo docker container rm web1 web2 web3 lb db1 db2 db3 dbproxy
+	cd ~/
+	sudo rm -rf volumes/
+	sudo git clone 	https://github.com/Secretmud/volumes.git
 }
 
 setup_containers() {
@@ -81,7 +79,6 @@ setup_containers() {
 	sudo docker run -d --name dbproxy --hostname maxscale -v ~/volumes/dbproxy/my-maxscale.cnf:/etc/maxscale.cnf.d/my-maxscale.cnf mariadb/maxscale:latest
 }
 
-clean_volumes
 print_menu
 echo "Enter numerical option"
 read input
@@ -103,5 +100,8 @@ case $input in
         4)
                 setup_containers
         ;;
+	5)
+		clean_volumes
+	;;
 esac
 
