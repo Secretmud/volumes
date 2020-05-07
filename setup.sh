@@ -1,4 +1,8 @@
 #!/bin/bash
+secs=$((10))
+#Countdown() {
+
+#}
 
 install_docker() {
         sudo apt install -y docker.io
@@ -51,8 +55,7 @@ setup_containers() {
         done
 
 	sudo docker run -d --name lb --add-host web1:172.17.0.2 --add-host web2:172.17.0.3 --add-host web3:172.17.0.4 --add-host maxscale:172.17.0.9 -v ~/volumes/lb:/usr/local/etc/haproxy:ro haproxy:latest
-	echo "Setting up database connections this might take some time"
-	sleep 10
+	echo "Web servers are set up. Setting up databases might take a while:"
 	sudo docker run -d --name db1 --hostname dbgc1 \
  	-e MYSQL_ROOT_PASSWORD="rootpass" -e MYSQL_USER=maxscaleuser -e MYSQL_PASSWORD=maxscalepass -e MYSQL_USER=dats42 -e MYSQL_PASSWORD="stream doctor come" \
 	-v ~/volumes/db1/datadir:/var/lib/mysql -v ~/volumes/db1/conf.d:/etc/mysql/mariadb.conf.d \
@@ -60,13 +63,9 @@ setup_containers() {
   	-v ~/volumes/db1/init.db/studentinfo.sql:/docker-entrypoint-initdb.d/studentinfo.sql:ro \
   	mariadb:10.4 
 
-	sleep 150
-	#sudo docker cp $direc/volumes/sql/maxscaleuser.sql db1:/
-	#sudo docker cp $direc/volumes/sql/studentinfo.sql db1:/
-	sleep 1
-	#sudo docker exec -i db1 bash -c 'exec mysql -u root -p"rootpass" < /maxscaleuser.sql'
-	#sudo docker exec -i db1 bash -c 'exec mysql -u root -p"rootpass" < /studentinfo.sql'
-	sleep 10
+	echo "Setting up db1.."
+       	secs=$((150))	
+	Countdown
 	sudo docker run -d --name db2 --hostname dbgc2 \
 	  -e MYSQL_ROOT_PASSWORD="rootpass" \
 	  -e MYSQL_USER=maxscaleuser \
@@ -75,7 +74,9 @@ setup_containers() {
 	  -v ~/volumes/db2/conf.d:/etc/mysql/mariadb.conf.d \
 	  mariadb:10.4
 
-	sleep 40
+	echo "Setting up db2.."
+       	secs=$((40))	
+	Countdown
 	sudo docker run -d --name db3 --hostname dbgc3 \
 	  -e MYSQL_ROOT_PASSWORD="rootpass" \
 	  -e MYSQL_USER=maxscaleuser \
@@ -83,8 +84,15 @@ setup_containers() {
 	  -v ~/volumes/db3/datadir:/var/lib/mysql \
 	  -v ~/volumes/db3/conf.d:/etc/mysql/mariadb.conf.d \
 	  mariadb:10.4
-	sleep 10
+
+	echo "Setting up db3.."
+       	secs=$((15))	
+	Countdown
 	sudo docker run -d --name dbproxy --hostname maxscale -v ~/volumes/dbproxy/my-maxscale.cnf:/etc/maxscale.cnf.d/my-maxscale.cnf mariadb/maxscale:latest
+	echo "Setting up dbproxy.."
+       	secs=$((10))	
+	Countdown
+
 }
 
 print_menu
