@@ -60,7 +60,7 @@ setup_containers() {
   	-v ~/volumes/db1/init.db/studentinfo.sql:/docker-entrypoint-initdb.d/studentinfo.sql:ro \
   	mariadb:10.4 --wsrep-new-cluster
 
-	sleep 40
+	sleep 60
 	#sudo docker cp $direc/volumes/sql/maxscaleuser.sql db1:/
 	#sudo docker cp $direc/volumes/sql/studentinfo.sql db1:/
 	sleep 1
@@ -75,7 +75,7 @@ setup_containers() {
 	  -v ~/volumes/db2/conf.d:/etc/mysql/mariadb.conf.d \
 	  mariadb:10.4
 
-	sleep 60
+	sleep 40
 	sudo docker run -d --name db3 --hostname dbgc3 \
 	  -e MYSQL_ROOT_PASSWORD="rootpass" \
 	  -e MYSQL_USER=maxscaleuser \
