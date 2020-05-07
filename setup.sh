@@ -1,8 +1,12 @@
 #!/bin/bash
 secs=$((10))
-#Countdown() {
-
-#}
+Countdown() {
+while [ $secs -gt 0 ]; do
+        echo -ne "$secs\033[0K\r"
+        sleep 1
+        : $((secs--))
+done
+}
 
 install_docker() {
         sudo apt install -y docker.io
