@@ -60,7 +60,7 @@ setup_containers() {
   	-v ~/volumes/db1/init.db/studentinfo.sql:/docker-entrypoint-initdb.d/studentinfo.sql:ro \
   	mariadb:10.4 
 
-	sleep 60
+	sleep 150
 	#sudo docker cp $direc/volumes/sql/maxscaleuser.sql db1:/
 	#sudo docker cp $direc/volumes/sql/studentinfo.sql db1:/
 	sleep 1
