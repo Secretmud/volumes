@@ -1,0 +1,219 @@
+body {
+    background-color: #FFFFFF;
+}
+
+* {
+    padding: 0;
+    margin: 0;
+}
+
+.navigation {
+    background-color: #090E2F;
+    width: auto;
+    text-decoration: none;
+    color: white;
+}
+
+.navigation ul::after{
+    content: "";
+    clear: both;
+    display: table;
+}
+
+.navigation a {
+    text-decoration: inherit;
+    color: inherit;
+    width: 100%;
+}
+
+.navigation li {
+    list-style-type: none;
+    display: inline-block;
+    padding: 10px;
+    padding-bottom: 5px;
+    padding-top: 5px;
+}
+
+.link {
+    margin-top: 14px;
+    margin-bottom: 14px;
+    border: 1px solid white;
+    border-radius: 50px;
+    background-color: #101a56;
+    margin-right: 30px;
+    float: right;
+}
+
+.link:hover {
+    background-color: aliceblue;
+    color: #090E2F;
+}
+
+.logo {
+    float: left;
+    margin-right: 5%;
+    margin-left: 30px;
+    font-size: 2em;
+    font-family: monospace;
+    
+    margin-bottom: 10px;
+    margin-top: 10px;
+}
+
+.title {
+    padding: 15px 30px 14px 30px;
+    font-size: 2.2em;
+    text-align: left;
+}
+
+.students {
+    padding: 15px 30px 30px 30px;
+}
+
+.studenttable {
+    font-family: "Trebuchet MS", Arial, Helvetica, sans-serif;
+    border-collapse: collapse;
+    width: 100%;
+    margin-bottom: 12px;
+}
+
+.studenttable td, .studenttable th {
+    border: 1px solid #ddd;
+    padding: 8px;
+}
+
+.studenttable th:last-child {
+    border-left: 0px;
+}
+
+.studenttable th:nth-child(8) {
+    border-right: 0px;
+}
+
+.studenttable tr:nth-child(even){
+    background-color: #ddeaff;
+}
+
+.studenttable tr:hover {
+    background-color: #ddd;
+}
+
+.edit {
+    
+}
+
+.btn {
+    border: 1px solid black;
+    border-radius: 5px;
+    padding: 2px 2px 2px 2px;
+    text-decoration: none;
+    color: white;
+    text-transform: lowe;
+}
+
+.btn-delete {
+    background-color: red;
+}
+
+.btn-update {
+    background-color: limegreen;
+}
+
+.studenttable th {
+    padding-top: 12px;
+    padding-bottom: 12px;
+    text-align: left;
+    background-color: #2e70b8;
+    color: white;
+}
+
+.count {
+    font-weight: bold;
+}
+
+.info {
+    text-align: center;
+    margin: 5px 30px 5px 30px;
+    padding: 0px;
+    border: 1px solid black;
+    
+}
+
+.info-success {
+    background-color: limegreen;
+}
+
+.info-warning {
+    background-color: yellow;
+}
+
+.info-danger {
+    background-color: #A94442;
+}
+
+/* Unique for deletion page */
+
+.delete-question {
+    margin: 20px 0px 20px 0px;
+    text-align: center;
+    font-size: 1.3em;
+}
+
+
+.btn-no {
+    margin-left: 20px;
+    background-color: red;
+}
+
+.btn-yes {
+    background-color: limegreen;
+}
+
+/* Unique for registration */
+
+.form {
+    margin: 10px 30px 30px 30px;
+}
+
+.formtable {
+    margin-left: auto;
+    margin-right: auto;
+    border: 1px solid black;
+    border-radius: 10px;
+    padding: 10px;
+    background-color: beige;
+    box-shadow: 10px 10px 5px gray;
+}
+
+.form td:nth-child(1) {
+    text-align: right;
+    padding-right: 10px;
+}
+
+input[type=text], select {
+    width: 100%;
+    padding: 12px 20px;
+    margin: 8px 0;
+    display: inline-block;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    box-sizing: border-box;
+}
+
+.buttons {
+    float: right;
+}
+
+.buttons * {
+    margin: 0px 0px 0px 10px;
+    padding: 0px 5px 0px 5px;
+}
+
+/* Footer */
+
+.footer {
+    padding: 4px 30px 4px 30px;
+    background-color: #090E2F;
+    color: white;
+    text-align: center;
+}

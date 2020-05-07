@@ -45,7 +45,7 @@ setup_containers() {
 	direc=$(pwd)
         for i in 1 2 3
         do
-                sudo docker run --name web$i --hostname web$i  --add-host maxscale:172.17.0.9 -v ~/volumes/webapp/:/var/www/html -d richarvey/nginx-php-fpm
+                sudo docker run --name web$i --hostname web$i  --add-host maxscale:172.17.0.9 -v ~/volumes/web1/html/:/var/www/html -d richarvey/nginx-php-fpm
 		sleep 1
 
         done
@@ -54,7 +54,7 @@ setup_containers() {
 	echo "Setting up database connections this might take some time"
 	sleep 10
 	sudo docker run -d --name db1 --hostname dbgc1 \
- 	-e MYSQL_ROOT_PASSWORD="rootpass" -e MYSQL_USER=maxscaleuser -e MYSQL_PASSWORD=maxscalepass \
+ 	-e MYSQL_ROOT_PASSWORD="rootpass" -e MYSQL_USER=maxscaleuser -e MYSQL_PASSWORD=maxscalepass -e MYSQL_USER=dats42 -e MYSQL_PASSWORD="stream doctor come" \
 	-v ~/volumes/db1/datadir:/var/lib/mysql -v ~/volumes/db1/conf.d:/etc/mysql/mariadb.conf.d \
  	-v ~/volumes/db1/init.db/maxscaleuser.sql:/docker-entrypoint-initdb.d/maxscaleuser.sql:ro \
   	-v ~/volumes/db1/init.db/studentinfo.sql:/docker-entrypoint-initdb.d/studentinfo.sql:ro \
