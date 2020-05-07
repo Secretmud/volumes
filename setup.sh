@@ -45,29 +45,27 @@ setup_containers() {
 	direc=$(pwd)
         for i in 1 2 3
         do
-                sudo docker run --name web$i --hostname web$i  -v ~/volumes/webapp/:/var/www/html -d richarvey/nginx-php-fpm
+                sudo docker run --name web$i --hostname web$i  --add-host maxscale:172.17.0.9 -v ~/volumes/webapp/:/var/www/html -d richarvey/nginx-php-fpm
 		sleep 1
 
         done
 
-	sudo docker run -d --name lb --add-host web1:172.17.0.2 --add-host web2:172.17.0.3 --add-host web3:172.17.0.4 -v ~/volumes/lb:/usr/local/etc/haproxy:ro haproxy:latest
+	sudo docker run -d --name lb --add-host web1:172.17.0.2 --add-host web2:172.17.0.3 --add-host web3:172.17.0.4 --add-host maxscale:172.17.0.9 -v ~/volumes/lb:/usr/local/etc/haproxy:ro haproxy:latest
 	echo "Setting up database connections this might take some time"
 	sleep 10
 	sudo docker run -d --name db1 --hostname dbgc1 \
-	  -e MYSQL_ROOT_PASSWORD="rootpass" \
-	  -e MYSQL_USER=maxscaleuser \
-	  -e MYSQL_PASSWORD=maxscalepass \
-	  -v ~/volumes/db1/datadir:/var/lib/mysql \
-	  -v ~/volumes/db1/conf.d:/etc/mysql/mariadb.conf.d \
-	  mariadb:10.4 \
-	   --wsrep-new-cluster
+ 	-e MYSQL_ROOT_PASSWORD="rootpass" -e MYSQL_USER=maxscaleuser -e MYSQL_PASSWORD=maxscalepass \
+	-v ~/volumes/db1/datadir:/var/lib/mysql -v ~/volumes/db1/conf.d:/etc/mysql/mariadb.conf.d \
+ 	-v ~/volumes/db1/init.db/maxscaleuser.sql:/docker-entrypoint-initdb.d/maxscaleuser.sql:ro \
+  	-v ~/volumes/db1/init.db/studentinfo.sql:/docker-entrypoint-initdb.d/studentinfo.sql:ro \
+  	mariadb:10.4 --wsrep-new-cluster
 
 	sleep 40
-	sudo docker cp $direc/volumes/sql/maxscaleuser.sql db1:/
-	sudo docker cp $direc/volumes/sql/studentinfo.sql db1:/
+	#sudo docker cp $direc/volumes/sql/maxscaleuser.sql db1:/
+	#sudo docker cp $direc/volumes/sql/studentinfo.sql db1:/
 	sleep 1
-	sudo docker exec -i db1 bash -c 'exec mysql -u root -p"rootpass" < /maxscaleuser.sql'
-	sudo docker exec -i db1 bash -c 'exec mysql -u root -p"rootpass" < /studentinfo.sql'
+	#sudo docker exec -i db1 bash -c 'exec mysql -u root -p"rootpass" < /maxscaleuser.sql'
+	#sudo docker exec -i db1 bash -c 'exec mysql -u root -p"rootpass" < /studentinfo.sql'
 	sleep 10
 	sudo docker run -d --name db2 --hostname dbgc2 \
 	  -e MYSQL_ROOT_PASSWORD="rootpass" \
