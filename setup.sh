@@ -58,7 +58,7 @@ setup_containers() {
 	-v ~/volumes/db1/datadir:/var/lib/mysql -v ~/volumes/db1/conf.d:/etc/mysql/mariadb.conf.d \
  	-v ~/volumes/db1/init.db/maxscaleuser.sql:/docker-entrypoint-initdb.d/maxscaleuser.sql:ro \
   	-v ~/volumes/db1/init.db/studentinfo.sql:/docker-entrypoint-initdb.d/studentinfo.sql:ro \
-  	mariadb:10.4 --wsrep-new-cluster
+  	mariadb:10.4 
 
 	sleep 60
 	#sudo docker cp $direc/volumes/sql/maxscaleuser.sql db1:/
