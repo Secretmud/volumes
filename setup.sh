@@ -75,7 +75,7 @@ setup_containers() {
 	  -v ~/volumes/db2/conf.d:/etc/mysql/mariadb.conf.d \
 	  mariadb:10.4
 
-	sleep 40
+	sleep 60
 	sudo docker run -d --name db3 --hostname dbgc3 \
 	  -e MYSQL_ROOT_PASSWORD="rootpass" \
 	  -e MYSQL_USER=maxscaleuser \
