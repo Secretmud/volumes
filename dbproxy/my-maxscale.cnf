@@ -1,20 +1,20 @@
 [db1]
 type=server
-address=172.17.0.6
+address=dbgc1
 port=3306
 protocol=MariaDBBackend
 serv_weight = 2
 
 [db2]
 type=server
-address=172.17.0.7
+address=dbgc2
 port=3306
 protocol=MariaDBBackend
 serv_weight = 1
 
 [db3]
 type=server
-address=172.17.0.8
+address=dbgc3
 port=3306
 protocol=MariaDBBackend
 serv_weight = 1
