@@ -1,11 +1,12 @@
 #!/bin/bash
 secs=$((10))
 Countdown() {
-while [ $secs -gt 0 ]; do
-        echo -ne "$secs\033[0K\r"
-        sleep 1
-        : $((secs--))
-done
+	tot=$(echo "scale=2; $secs/100" | bc)
+	for i in $(seq 1 100)
+	do
+		sleep $tot
+		echo $i
+	done | whiptail --title "Setting up db$x" --gauge 'Running...' 6 60 0
 }
 
 install_docker() {
@@ -53,12 +54,12 @@ setup_containers() {
 	direc=$(pwd)
         for i in 1 2 3
         do
-                sudo docker run --name web$i --hostname web$i  --add-host maxscale:172.17.0.9 -v ~/volumes/web1/html/:/var/www/html -d richarvey/nginx-php-fpm
+                sudo docker run --name web$i --hostname web$i  --add-host maxscale:172.17.0.9 -v ~/volumes/web$i/html/:/var/www/html -d richarvey/nginx-php-fpm
 		sleep 1
 
         done
 
-	sudo docker run -d --name lb --add-host web1:172.17.0.2 --add-host web2:172.17.0.3 --add-host web3:172.17.0.4 --add-host maxscale:172.17.0.9 -v ~/volumes/lb:/usr/local/etc/haproxy:ro haproxy:latest
+	sudo docker run -d --name lb -p 10.10.24.179:80:80 --add-host web1:172.17.0.2 --add-host web2:172.17.0.3 --add-host web3:172.17.0.4 --add-host maxscale:172.17.0.9 -v ~/volumes/lb:/usr/local/etc/haproxy:ro haproxy:latest
 	echo "Web servers are set up. Setting up databases might take a while:"
 	sudo docker run -d --name db1 --hostname dbgc1 \
  	-e MYSQL_ROOT_PASSWORD="rootpass" -e MYSQL_USER=maxscaleuser -e MYSQL_PASSWORD=maxscalepass -e MYSQL_USER=dats42 -e MYSQL_PASSWORD="stream doctor come" \
@@ -69,6 +70,7 @@ setup_containers() {
 
 	echo "Setting up db1.."
        	secs=$((150))	
+	x=$((1))
 	Countdown
 	sudo docker run -d --name db2 --hostname dbgc2 \
 	  -e MYSQL_ROOT_PASSWORD="rootpass" \
@@ -80,6 +82,7 @@ setup_containers() {
 
 	echo "Setting up db2.."
        	secs=$((40))	
+	x=$((2))
 	Countdown
 	sudo docker run -d --name db3 --hostname dbgc3 \
 	  -e MYSQL_ROOT_PASSWORD="rootpass" \
@@ -91,14 +94,20 @@ setup_containers() {
 
 	echo "Setting up db3.."
        	secs=$((15))	
+	x=$((3))
 	Countdown
-	sudo docker run -d --name dbproxy --hostname maxscale -v ~/volumes/dbproxy/my-maxscale.cnf:/etc/maxscale.cnf.d/my-maxscale.cnf mariadb/maxscale:latest
+	sudo docker run -d --name dbproxy --hostname maxscale \
+		--add-host dbgc1:172.17.0.6 \
+		--add-host dbgc2:172.17.0.7 \
+		--add-host dbgc3:172.17.0.8 \
+		-v ~/volumes/dbproxy/my-maxscale.cnf:/etc/maxscale.cnf.d/my-maxscale.cnf mariadb/maxscale:latest
 	echo "Setting up dbproxy.."
        	secs=$((10))	
+	x='proxy'
 	Countdown
 
 }
-
+: '
 print_menu
 echo "Enter numerical option"
 read input
@@ -124,4 +133,9 @@ case $input in
 		clean_volumes
 	;;
 esac
-
+'
+echo "Welcome to the docker setup script. Enjoy.."
+clean_volumes
+install_docker
+hosts_setup
+setup_containers
