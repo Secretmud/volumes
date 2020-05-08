@@ -44,7 +44,6 @@ function establishDBConnection($host, $user, $passwd, $db) {
  
         $returText .= '</div>';
         echo $returText;
-	echo $e;
 
         echo '<div class="footer">';
         echo "Served by: <b>" . $_SERVER['SERVER_ADDR'] . "</b></br>";
