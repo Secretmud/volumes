@@ -82,13 +82,13 @@ setup_containers() {
     #   webserver setup       #
     ###########################
     echo "Setting up web server number 1.."
-    sudo docker run --name $w1_container_name --hostname $w1_host_name --ip $w1_IP --add-host $databaseproxy_host_name:$databaseproxy_IP -v ~/volumes/web1/html/:/var/www/html -d richarvey/nginx-php-fpm
+    sudo docker run --name $w1_container_name --hostname $w1_host_name --add-host $databaseproxy_host_name:$databaseproxy_IP -v ~/volumes/web1/html/:/var/www/html -d richarvey/nginx-php-fpm
     sleep 1
     echo "Setting up web server number 2.."
-    sudo docker run --name $w2_container_name --hostname $w2_host_name --ip $w2_IP --add-host $databaseproxy_host_name:$databaseproxy_IP -v ~/volumes/web2/html/:/var/www/html -d richarvey/nginx-php-fpm
+    sudo docker run --name $w2_container_name --hostname $w2_host_name --add-host $databaseproxy_host_name:$databaseproxy_IP -v ~/volumes/web2/html/:/var/www/html -d richarvey/nginx-php-fpm
     sleep 1
     echo "Setting up web server number 3.."
-    sudo docker run --name $w3_container_name --hostname $w3_host_name --ip $w3_IP --add-host $databaseproxy_host_name:$databaseproxy_IP -v ~/volumes/web3/html/:/var/www/html -d richarvey/nginx-php-fpm
+    sudo docker run --name $w3_container_name --hostname $w3_host_name --add-host $databaseproxy_host_name:$databaseproxy_IP -v ~/volumes/web3/html/:/var/www/html -d richarvey/nginx-php-fpm
     sleep 1
     
     
@@ -99,7 +99,7 @@ setup_containers() {
     ###########################
     echo "Configuring the loadbalancer.."
     sleep 1
-    sudo docker run -d --name $loadbal_container_name --hostname $loadbal_host_name --ip $loadbal_IP -p $machine_ip:80:80 \
+    sudo docker run -d --name $loadbal_container_name --hostname $loadbal_host_name -p $machine_ip:80:80 \
     --add-host $w1_host_name:$w1_IP --add-host $w2_host_name:$w2_IP --add-host $w3_host_name:$w3_IP \
     --add-host $databaseproxy_host_name:$databaseproxy_IP -v ~/volumes/lb:/usr/local/etc/haproxy:ro haproxy:latest
     echo "Web servers are set up. Setting up databases might take a while:"
@@ -110,7 +110,7 @@ setup_containers() {
     #   Database setup        #
     ###########################
     
-    sudo docker run -d --name $database1_container_name --hostname $database1_host_name --ip $database1_IP \
+    sudo docker run -d --name $database1_container_name --hostname $database1_host_name \
     -e MYSQL_ROOT_PASSWORD=$root_password -e MYSQL_USER=$maxuser -e MYSQL_PASSWORD=$maxpass -e MYSQL_USER="$datsusername" -e MYSQL_PASSWORD="$datspassword" \
     -v ~/volumes/db1/datadir:/var/lib/mysql -v ~/volumes/db1/conf.d:/etc/mysql/mariadb.conf.d \
     -v ~/volumes/db1/init.db/maxscaleuser.sql:/docker-entrypoint-initdb.d/maxscaleuser.sql:ro \
@@ -134,7 +134,7 @@ setup_containers() {
         
     done
     
-    sudo docker run -d --name $database2_container_name --hostname $database2_host_name  --ip $database2_IP\
+    sudo docker run -d --name $database2_container_name --hostname $database2_host_name \
     -e MYSQL_ROOT_PASSWORD=$root_password \
     -e MYSQL_USER=$maxuser \
     -e MYSQL_PASSWORD=$maxpass \
@@ -146,7 +146,7 @@ setup_containers() {
     secs=$((40))
     x=$((2))
     Countdown
-    sudo docker run -d --name $database3_container_name --hostname $database3_host_name --ip $database3_IP\
+    sudo docker run -d --name $database3_container_name --hostname $database3_host_name \
     -e MYSQL_ROOT_PASSWORD=$root_password \
     -e MYSQL_USER=$maxuser\
     -e MYSQL_PASSWORD=$maxpass \
@@ -161,7 +161,7 @@ setup_containers() {
     ###########################
     #   Dataproxy setup       #
     ###########################
-    sudo docker run -d --name $databaseproxy_container_name --hostname $databaseproxy_host_name --ip $databaseproxy_IP\
+    sudo docker run -d --name $databaseproxy_container_name --hostname $databaseproxy_host_name \
     --add-host $database1_host_name:$database1_IP \
     --add-host $database2_host_name:$database2_IP \
     --add-host $database3_host_name:$database3_IP \
