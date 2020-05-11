@@ -1,4 +1,4 @@
-a#!/bin/bash
+#!/bin/bash
 if [[ -f "dats42-params.sh" ]];
 then
     . dats42-params.sh
