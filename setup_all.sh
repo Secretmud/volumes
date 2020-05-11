@@ -1,4 +1,4 @@
-#!/bin/bash
+a#!/bin/bash
 source dats42-params.sh
 machine_ip=$(hostname -I | awk '{print $1}')
 #########################
@@ -18,7 +18,11 @@ Countdown() {
 
 # Installing docking and required images.
 install_docker() {
+  echo "Installing docker.."
+  sleep 1
   sudo apt install -y docker.io
+  echo "Pulling docker images.."
+  sleep 1
   sudo docker pull richarvey/nginx-php-fpm:latest
   sudo docker pull haproxy:latest
   sudo docker pull mariadb:10.4
@@ -27,6 +31,8 @@ install_docker() {
 
 # Adds the host with their bound ip to the /etc/hosts file on the host machine.
 hosts_setup() {
+  echo "Configuring /etc/hosts.."
+  sleep 1
   FILE=/etc/hosts.bak
 	#makes a backup of original before adding
   if [[ -f "$FILE" ]];
@@ -46,14 +52,15 @@ hosts_setup() {
 }
 
 clean_volumes() {
-  echo "Removing any docker containers with same name:"
-  sleep 4
+  echo "Removing any conflicting docker containers.."
+  sleep 1
   sudo docker stop $w1_container_name $w2_container_name $w3_container_name $loadbal_container_name \
   $database1_container_name $database2_container_name $database3_container_name $databaseproxy_container_name
   sudo docker rm $w1_container_name $w2_container_name $w3_container_name $loadbal_container_name \
   $database1_container_name $database2_container_name $database3_container_name $databaseproxy_container_name
   cd ~/
   sudo rm -rf ~/volumes/
+  echo "Cloning github repository and setting up.."
   sudo git clone 	https://github.com/Secretmud/volumes.git
   sudo mkdir -p ~/volumes/db2/datadir/mysql
   sudo mkdir -p ~/volumes/db3/datadir/mysql
@@ -71,11 +78,13 @@ setup_containers() {
   ###########################
   #   webserver setup       #
   ###########################
-
+  echo "Setting up web server number 1.."
   sudo docker run --name $w1_container_name --hostname $w1_host_name --ip $w1_IP --add-host $databaseproxy_host_name:$databaseproxy_IP -v ~/volumes/web1/html/:/var/www/html -d richarvey/nginx-php-fpm
   sleep 1
+  echo "Setting up web server number 2.."
   sudo docker run --name $w2_container_name --hostname $w2_host_name --ip $w2_IP --add-host $databaseproxy_host_name:$databaseproxy_IP -v ~/volumes/web2/html/:/var/www/html -d richarvey/nginx-php-fpm
   sleep 1
+  echo "Setting up web server number 3.."
   sudo docker run --name $w3_container_name --hostname $w3_host_name --ip $w3_IP --add-host $databaseproxy_host_name:$databaseproxy_IP -v ~/volumes/web3/html/:/var/www/html -d richarvey/nginx-php-fpm
   sleep 1
 
@@ -85,6 +94,8 @@ setup_containers() {
   ###########################
   #   Load balancer setup   #
   ###########################
+  echo "Configuring the loadbalancer.."
+  sleep 1
   sudo docker run -d --name $loadbal_container_name --hostname $loadbal_host_name --ip $loadbal_IP -p $machine_ip:80:80 \
   --add-host $w1_host_name:$w1_IP --add-host $w2_host_name:$w2_IP --add-host $w3_host_name:$w3_IP \
   --add-host $databaseproxy_host_name:$databaseproxy_IP -v ~/volumes/lb:/usr/local/etc/haproxy:ro haproxy:latest
