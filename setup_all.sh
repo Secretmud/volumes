@@ -1,5 +1,10 @@
 a#!/bin/bash
-source dats42-params.sh
+if [[ -f "dats42-params.sh" ]];
+then
+    . dats42-params.sh
+else
+    . ~/volumes/dats42-params.sh
+fi
 machine_ip=$(hostname -I | awk '{print $1}')
 #########################
 # SET this manually if above command does not work
