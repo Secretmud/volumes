@@ -74,7 +74,7 @@ clean_volumes() {
     sudo mkdir -p ~/volumes/db3/datadir/mysql
     
     # Coniguring permissions for sql and database.
-    sudo sed -i "s/DATSUSER/$datsusername/g; s/MAXSUSER/$maxuser/g; s/MAX_PASS/$maxpass/g; s/MAX_IP/$databaseproxy_IP/g" ~/volumes/db1/init.db/maxscaleuser.sql
+    sudo sed -i "s/DATSUSER/$datsusername/g; s/MAX_USERNAME/$maxuser/g; s/MAX_PASS/$maxpass/g; s/MAX_IP/$databaseproxy_IP/g" ~/volumes/db1/init.db/maxscaleuser.sql
     sudo sed -i "s/DATSUSER/$datsusername/g; s/DATSPASS/$datspassword/g" ~/volumes/web1/html/include/dbconnection.php
     sudo echo -e  ~/volumes/web2/html/include/ ~/volumes/web3/html/include/ | sudo xargs -n 1 cp ~/volumes/web1/html/include/dbconnection.php
     sudo sed -i "s/MAX_USERNAME/$maxuser/g; s/MAX_PASS/$maxpass/g" ~/volumes/dbproxy/my-maxscale.cnf
