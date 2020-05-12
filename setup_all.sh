@@ -79,9 +79,9 @@ clean_volumes() {
     sudo echo -e  ~/volumes/web2/html/include/ ~/volumes/web3/html/include/ | sudo xargs -n 1 cp ~/volumes/web1/html/include/dbconnection.php
     sudo sed -i "s/MAX_USERNAME/$maxuser/g; s/MAX_PASS/$maxpass/g; s/DB1_HOST/$database1_host_name/g;s/DB2_HOST/$database2_host_name/g;s/DB3_HOST/$database3_host_name/g" ~/volumes/dbproxy/my-maxscale.cnf
     sudo sed -i "s/DATSUSER/$datsusername/g; s/MAX_USERNAME/$maxuser/g; s/MAX_PASS/$maxpass/g; s/MAXSCALE_IP/$databaseproxy_IP/g" ~/volumes/db1/init.db/maxscaleuser.sql
-    sudo sed -i "s/DB1_HOST/$w1_IP/g; s/DB2_HOST/$w2_IP/g; s/DB3_HOST/$w3_IP/g; s/DB1_HOST_NAME/$w1_container_name/g" ~/volumes/db1/conf.d/my.cnf
-    sudo sed -i "s/DB1_HOST/$w1_IP/g; s/DB2_HOST/$w2_IP/g; s/DB3_HOST/$w3_IP/g; s/DB2_HOST_NAME/$w2_container_name/g" ~/volumes/db2/conf.d/my.cnf
-    sudo sed -i "s/DB1_HOST/$w1_IP/g; s/DB2_HOST/$w2_IP/g ;s/DB3_HOST/$w3_IP/g; s/DB3_HOST_NAME/$w3_container_name/g" ~/volumes/db3/conf.d/my.cnf
+    sudo sed -i "s/DB1_HOST/$database1_IP/g; s/DB2_HOST/$database2_IP/g; s/DB3_HOST/$database3_IP/g; s/DB1_HOST_NAME/$database1_container_name/g" ~/volumes/db1/conf.d/my.cnf
+    sudo sed -i "s/DB1_HOST/$database1_IP/g; s/DB2_HOST/$database2_IP/g; s/DB3_HOST/$database3_IP/g; s/DB2_HOST_NAME/$database2_container_name/g" ~/volumes/db2/conf.d/my.cnf
+    sudo sed -i "s/DB1_HOST/$database1_IP/g; s/DB2_HOST/$database2_IP/g ;s/DB3_HOST/$database3_IP/g; s/DB3_HOST_NAME/$database3_container_name/g" ~/volumes/db3/conf.d/my.cnf
 }
 
 setup_containers() {
