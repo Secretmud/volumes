@@ -1,5 +1,5 @@
-grant select on mysql.* to 'maxscaleuser'@'172.17.0.9' IDENTIFIED BY 'maxscalepass';
-grant replication slave on *.* to 'maxscaleuser'@'172.17.0.9';
-grant replication client on *.* to 'maxscaleuser'@'172.17.0.9';
-grant show databases on *.* to 'maxscaleuser'@'172.17.0.9';
+grant select on mysql.* to 'MAX_USERNAME'@'MAXSCALE_IP' IDENTIFIED BY 'MAX_PASS';
+grant replication slave on *.* to 'MAX_USERNAME'@'MAXSCALE_IP';
+grant replication client on *.* to 'MAX_USERNAME'@'MAXSCALE_IP';
+grant show databases on *.* to 'MAX_USERNAME'@'MAXSCALE_IP';
 flush privileges;
